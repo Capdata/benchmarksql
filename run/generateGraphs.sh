@@ -19,6 +19,15 @@ SIMPLE_GRAPHS="tpm_nopm latency cpu_utilization dirty_buffers"
 for resdir in $* ; do
     cd "${resdir}" || exit 1
 
+    echo -n "Generating ${resdir}/p_db.png ... "
+    out=$(sed -e "s/@WIDTH@/${WIDTH}/g" -e "s/@HEIGHT@/${HEIGHT}/g" -e "s|@WD@|${resdir}|g" < ../misc/db.R | R --no-save 2>&1)    
+	if [ $? -ne 0 ] ; then
+	    echo "ERROR"
+	    echo "$out" >&2
+	    exit 3
+	fi
+	echo "OK"
+    
     for graph in $SIMPLE_GRAPHS ; do
 	echo -n "Generating ${resdir}/${graph}.png ... "
 	out=$(sed -e "s/@WIDTH@/${WIDTH}/g" -e "s/@HEIGHT@/${HEIGHT}/g" \
@@ -84,7 +93,6 @@ for resdir in $* ; do
 	fi
 	echo "OK"
     done
-
     cd ..
 done
 

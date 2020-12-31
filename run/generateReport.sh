@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+#-----------------------------------------------------
+# 31/12/2020 : N.Martin add database graphs
+#
+#-----------------------------------------------------
+#
 
 if [ $# -ne 1 ] ; then
     echo "usage: $(basename $0) RESULT_DIR" >&2
@@ -228,6 +233,24 @@ cat >>report.html <<_EOF_
     <img src="latency.png"/>
   </p>
 _EOF_
+
+# ----
+# Add all the database wait events
+# ----
+cat >>report.html <<_EOF_
+  <h2>
+    Database events
+  </h2>
+  <p>
+    The wait events are stacked on top of each other. 
+
+    <br/>
+    <img src="p_db.png"/>
+  </p>
+_EOF_
+
+
+
 
 # ----
 # Add all the System Resource graphs. First the CPU and dirty buffers.
