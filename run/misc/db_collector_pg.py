@@ -6,7 +6,7 @@ import time
 import pip
 import jaydebeapi
 import re
-
+import inspect
 
 # ----
 # main
@@ -20,8 +20,11 @@ def main(argv):
     global jdbc_driver_name
     jdbc_driver_name = "org.postgresql.Driver"
     global jdbc_driver_loc
-    curpath=os.path.realpath(__file__)
-    jdbc_driver_loc = curpath.'../../lib/postgresql-9.3-1102.jdbc41.jar' #/home/azureuser/benchmarksql-5.0/lib/postgres/postgresql-9.3-1102.jdbc41.jar'
+    curpath=os.path.dirname(os.path.abspath(__file__))
+    filename = inspect.getframeinfo(inspect.currentframe()).filename
+    path = os.path.dirname(os.path.abspath(filename))
+    jdbc_driver_loc = (path + '/../lib/postgres/postgresql-9.3-1102.jdbc41.jar')
+
 
     # Transactions
     global sql_tx
@@ -46,7 +49,7 @@ def main(argv):
     password       = (str) (argv[5])
 
     global sql_str
-    sql_str = "select wait_event_type,wait_event,state,count(*) from pg_stat_activity where usename = '".username."' and application_name ='' group by  wait_event_type,wait_event,state"
+    sql_str = "select wait_event_type,wait_event,state,count(*) from pg_stat_activity where usename = '"+username+"' and application_name ='' group by  wait_event_type,wait_event,state"
 
     #Extract DBNAME from connect_string
     # Sample connect_string : jdbc:postgresql://database_server_adress.com:port/database_name
